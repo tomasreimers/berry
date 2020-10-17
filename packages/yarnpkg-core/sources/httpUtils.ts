@@ -231,9 +231,9 @@ export async function request(target: string, body: Body, {configuration, header
   });
 }
 
-export async function get(target: string, {configuration, jsonResponse, ...rest}: Options) {
-  let entry = miscUtils.getFactoryWithDefault(cache, target, () => {
-    return prettyNetworkError(request(target, null, {configuration, ...rest}), {configuration}).then(response => {
+export async function get(target: string, {configuration, headers, jsonResponse, ...rest}: Options) {
+  let entry = miscUtils.getFactoryWithDefault(cache, `${target}-${headers?.Accept}`, () => {
+    return prettyNetworkError(request(target, null, {configuration, headers, ...rest}), {configuration}).then(response => {
       cache.set(target, response.body);
       return response.body;
     });
