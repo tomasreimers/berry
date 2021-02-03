@@ -1,5 +1,6 @@
 import {PortablePath, xfs, npath} from '@yarnpkg/fslib';
 import {createHash, BinaryLike}   from 'crypto';
+import * as crypto                from 'crypto';
 import globby                     from 'globby';
 
 export function makeHash<T extends string = string>(...args: Array<BinaryLike | null>): T {
@@ -11,7 +12,14 @@ export function makeHash<T extends string = string>(...args: Array<BinaryLike | 
   return hash.digest(`hex`) as T;
 }
 
-export function checksumFile(path: PortablePath) {
+export async function checksumFile(path: PortablePath) {
+  // @ts-expect-error - Types for webcrypto doesn't exist yet
+  if (crypto.webcrypto) {
+    // @ts-expect-error - Types for webcrypto doesn't exist yet
+    const hash = (await crypto.webcrypto.subtle.digest(`SHA-512`, await xfs.readFilePromise(path))) as ArrayBuffer;
+    return Buffer.from(hash).toString(`hex`);
+  }
+
   return new Promise<string>((resolve, reject) => {
     const hash = createHash(`sha512`);
     const stream = xfs.createReadStream(path);
