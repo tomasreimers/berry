@@ -7984,29 +7984,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["@rollup/plugin-alias", [
-        ["npm:3.1.2", {
-          "packageLocation": "./.yarn/cache/@rollup-plugin-alias-npm-3.1.2-10d0b877c3-c7256ab186.zip/node_modules/@rollup/plugin-alias/",
-          "packageDependencies": [
-            ["@rollup/plugin-alias", "npm:3.1.2"]
-          ],
-          "linkType": "SOFT",
-        }],
-        ["virtual:16110bda3ce959c103b1979c5d750ceb8ac9cfbd2049c118b6278e46e65aa65fd17e71e04a0ce5f75b7ca3203efd8e9c9b03c948a76c7f4bca807539915b5cfc#npm:3.1.2", {
-          "packageLocation": "./.yarn/__virtual__/@rollup-plugin-alias-virtual-c39add690f/0/cache/@rollup-plugin-alias-npm-3.1.2-10d0b877c3-c7256ab186.zip/node_modules/@rollup/plugin-alias/",
-          "packageDependencies": [
-            ["@rollup/plugin-alias", "virtual:16110bda3ce959c103b1979c5d750ceb8ac9cfbd2049c118b6278e46e65aa65fd17e71e04a0ce5f75b7ca3203efd8e9c9b03c948a76c7f4bca807539915b5cfc#npm:3.1.2"],
-            ["@types/rollup", null],
-            ["rollup", "npm:2.42.1"],
-            ["slash", "npm:3.0.0"]
-          ],
-          "packagePeers": [
-            "@types/rollup",
-            "rollup"
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["@rollup/plugin-commonjs", [
         ["npm:17.1.0", {
           "packageLocation": "./.yarn/cache/@rollup-plugin-commonjs-npm-17.1.0-0289bc4d60-b83f05c792.zip/node_modules/@rollup/plugin-commonjs/",
@@ -15592,7 +15569,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./packages/yarnpkg-pnp/",
           "packageDependencies": [
             ["@yarnpkg/pnp", "workspace:packages/yarnpkg-pnp"],
-            ["@rollup/plugin-alias", "virtual:16110bda3ce959c103b1979c5d750ceb8ac9cfbd2049c118b6278e46e65aa65fd17e71e04a0ce5f75b7ca3203efd8e9c9b03c948a76c7f4bca807539915b5cfc#npm:3.1.2"],
             ["@rollup/plugin-commonjs", "virtual:16110bda3ce959c103b1979c5d750ceb8ac9cfbd2049c118b6278e46e65aa65fd17e71e04a0ce5f75b7ca3203efd8e9c9b03c948a76c7f4bca807539915b5cfc#npm:17.1.0"],
             ["@rollup/plugin-node-resolve", "virtual:16110bda3ce959c103b1979c5d750ceb8ac9cfbd2049c118b6278e46e65aa65fd17e71e04a0ce5f75b7ca3203efd8e9c9b03c948a76c7f4bca807539915b5cfc#npm:11.2.0"],
             ["@rollup/plugin-typescript", "virtual:16110bda3ce959c103b1979c5d750ceb8ac9cfbd2049c118b6278e46e65aa65fd17e71e04a0ce5f75b7ca3203efd8e9c9b03c948a76c7f4bca807539915b5cfc#npm:8.2.0"],
@@ -15602,7 +15578,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@yarnpkg/libzip", "workspace:packages/yarnpkg-libzip"],
             ["@yarnpkg/monorepo", "workspace:."],
             ["cjs-module-lexer", "npm:1.1.0"],
-            ["enhanced-resolve", "npm:5.7.0"],
             ["resolve.exports", "npm:1.0.2"],
             ["rollup", "npm:2.42.1"],
             ["tslib", "npm:1.13.0"],
@@ -21516,15 +21491,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["enhanced-resolve", "npm:5.2.0"],
             ["graceful-fs", "npm:4.2.4"],
             ["tapable", "npm:2.0.0"]
-          ],
-          "linkType": "HARD",
-        }],
-        ["npm:5.7.0", {
-          "packageLocation": "./.yarn/cache/enhanced-resolve-npm-5.7.0-17286c70d6-9191640569.zip/node_modules/enhanced-resolve/",
-          "packageDependencies": [
-            ["enhanced-resolve", "npm:5.7.0"],
-            ["graceful-fs", "npm:4.2.4"],
-            ["tapable", "npm:2.2.0"]
           ],
           "linkType": "HARD",
         }]
@@ -39099,13 +39065,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["tapable", "npm:2.0.0"]
           ],
           "linkType": "HARD",
-        }],
-        ["npm:2.2.0", {
-          "packageLocation": "./.yarn/cache/tapable-npm-2.2.0-516ee6aa5b-5a7e31ddd2.zip/node_modules/tapable/",
-          "packageDependencies": [
-            ["tapable", "npm:2.2.0"]
-          ],
-          "linkType": "HARD",
         }]
       ]],
       ["tar", [
@@ -48702,7 +48661,7 @@ function makeApi(runtimeState, opts) {
    */
 
 
-  function applyNodeExportsResolution(unqualifiedPath) {
+  function applyNodeExportsResolution(unqualifiedPath, conditions = new Set()) {
     const locator = findPackageLocator(ppath.join(unqualifiedPath, `internal.js`), {
       resolveIgnored: true,
       includeDiscardFromLookup: true
@@ -48726,11 +48685,12 @@ function makeApi(runtimeState, opts) {
 
     if (!isRelativeRegexp.test(subpath)) subpath = `./${subpath}`;
     const resolvedExport = resolve(pkgJson, ppath.normalize(subpath), {
-      browser: false,
-      require: true,
+      browser: conditions.has(`browser`),
+      require: conditions.size === 0 ? true : conditions.has(`require`),
       // TODO: implement support for the --conditions flag
       // Waiting on https://github.com/nodejs/node/issues/36935
-      conditions: []
+      // @ts-expect-error - Type should be Set | Array
+      conditions
     });
     if (typeof resolvedExport === `string`) return ppath.join(packageLocation, resolvedExport);
     return null;
@@ -49236,10 +49196,10 @@ function makeApi(runtimeState, opts) {
     return ppath.normalize(unqualifiedPath);
   }
 
-  function resolveUnqualifiedExport(request, unqualifiedPath) {
+  function resolveUnqualifiedExport(request, unqualifiedPath, conditions = new Set()) {
     // "exports" only apply when requiring a package, not when requiring via an absolute / relative path
     if (isStrictRegExp.test(request)) return unqualifiedPath;
-    const unqualifiedExportPath = applyNodeExportsResolution(unqualifiedPath);
+    const unqualifiedExportPath = applyNodeExportsResolution(unqualifiedPath, conditions);
 
     if (unqualifiedExportPath) {
       return ppath.normalize(unqualifiedExportPath);
@@ -49281,7 +49241,8 @@ function makeApi(runtimeState, opts) {
 
   function resolveRequest(request, issuer, {
     considerBuiltins,
-    extensions
+    extensions,
+    conditions
   } = {}) {
     const unqualifiedPath = resolveToUnqualified(request, issuer, {
       considerBuiltins
@@ -49290,7 +49251,7 @@ function makeApi(runtimeState, opts) {
 
     const isIssuerIgnored = () => issuer !== null ? isPathIgnored(issuer) : false;
 
-    const remappedPath = (!considerBuiltins || !builtinModules.has(request)) && !isIssuerIgnored() ? resolveUnqualifiedExport(request, unqualifiedPath) : unqualifiedPath;
+    const remappedPath = (!considerBuiltins || !builtinModules.has(request)) && !isIssuerIgnored() ? resolveUnqualifiedExport(request, unqualifiedPath, conditions) : unqualifiedPath;
 
     try {
       return resolveUnqualified(remappedPath, {

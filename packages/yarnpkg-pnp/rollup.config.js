@@ -1,4 +1,3 @@
-import alias                from '@rollup/plugin-alias';
 import cjs                  from '@rollup/plugin-commonjs';
 import resolve              from '@rollup/plugin-node-resolve';
 import ts                   from '@rollup/plugin-typescript';
@@ -12,9 +11,6 @@ export default {
     format: `esm`,
   },
   plugins: [
-    alias({
-      entries: [{find: `pnpapi`, replacement: require.resolve(`./sources/esm-loader/stub.ts`)}],
-    }),
     resolve({preferBuiltins: true}),
     ts({skipLibCheck: true, target: `ES2018`, allowSyntheticDefaultImports: true}),
     cjs({requireReturnsDefault: `preferred`}),

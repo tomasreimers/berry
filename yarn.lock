@@ -3807,17 +3807,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-alias@npm:^3.1.1":
-  version: 3.1.2
-  resolution: "@rollup/plugin-alias@npm:3.1.2"
-  dependencies:
-    slash: ^3.0.0
-  peerDependencies:
-    rollup: ^1.20.0||^2.0.0
-  checksum: c7256ab186e73fe59326c642362064c2b4bc2c5b22ad69e994a0966e132bdc120f00dc4eb278e0734bc45f1fd6ae73f269ff68dab74505973fbd284a6580bb37
-  languageName: node
-  linkType: hard
-
 "@rollup/plugin-commonjs@npm:^17.0.0":
   version: 17.1.0
   resolution: "@rollup/plugin-commonjs@npm:17.1.0"
@@ -6325,7 +6314,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yarnpkg/pnp@workspace:packages/yarnpkg-pnp"
   dependencies:
-    "@rollup/plugin-alias": ^3.1.1
     "@rollup/plugin-commonjs": ^17.0.0
     "@rollup/plugin-node-resolve": ^11.0.1
     "@rollup/plugin-typescript": ^8.1.0
@@ -6335,7 +6323,6 @@ __metadata:
     "@yarnpkg/libzip": "workspace:^2.2.1"
     "@yarnpkg/monorepo": "workspace:0.0.0"
     cjs-module-lexer: ^1.0.0
-    enhanced-resolve: ^5.4.1
     resolve.exports: ^1.0.2
     rollup: ^2.35.1
     tslib: ^1.13.0
@@ -11216,16 +11203,6 @@ __metadata:
     graceful-fs: ^4.2.4
     tapable: ^2.0.0
   checksum: 93c61f4eacf6851e843b4bab1d8ca0bd231a1f46c2d78d96bd8fb91e411097f7a39a44d6d6e842b858dc0744bed5dcd0d7e3278af8b13ebc38dba24cf97036ff
-  languageName: node
-  linkType: hard
-
-"enhanced-resolve@npm:^5.4.1":
-  version: 5.7.0
-  resolution: "enhanced-resolve@npm:5.7.0"
-  dependencies:
-    graceful-fs: ^4.2.4
-    tapable: ^2.2.0
-  checksum: 91916405697c04512e4f29cf0f0dcf10b03751f7b6f51fda72661ddc5c79779d404335f933caa202f5e81f00944fe3a1cf180cc6b53fdaff2c9ce9d0f310f704
   languageName: node
   linkType: hard
 
@@ -25834,13 +25811,6 @@ resolve@^1.19.0:
   version: 2.0.0
   resolution: "tapable@npm:2.0.0"
   checksum: fe0f240c3ce75fcd5096e57ff54a48375ae73f2af5acc21763c324e604e4d3b73047397b18bee89e66c6d15c5634642575cb8726da321aa2d691b59eea6d32d8
-  languageName: node
-  linkType: hard
-
-"tapable@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "tapable@npm:2.2.0"
-  checksum: 5a7e31ddd2400d524b68e7ba0373e492ba52b321b8e1eb15b65956e9c1b9ba90dd175210a1318b6752538cbe3b284f4a7218a714be942aeeb812623c243aea25
   languageName: node
   linkType: hard
 

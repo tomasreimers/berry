@@ -95,6 +95,7 @@ export type ResolveToUnqualifiedOptions = {
 
 export type ResolveUnqualifiedOptions = {
   extensions?: Array<string>,
+  conditions?: Set<string>
 };
 
 export type ResolveRequestOptions =
